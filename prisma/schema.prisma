@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders      Order[]
+  enrollments Enrollment[]
+  attempts    QuizAttempt[]
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+model Category {
+  id      String   @id @default(cuid())
+  name    String
+  slug    String   @unique
+  courses Course[]
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  thumbnail   String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  lessons     Lesson[]
+  enrollments Enrollment[]
+  orderItems  OrderItem[]
+}
+
+model Lesson {
+  id       String  @id @default(cuid())
+  title    String
+  videoUrl String
+  duration Int
+  order    Int
+  free     Boolean @default(false)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  total     Float
+  status    OrderStatus @default(PENDING)
+  paymentId String?
+  createdAt DateTime    @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+model OrderItem {
+  id    String @id @default(cuid())
+  price Float
+
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id])
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+}
+
+model Enrollment {
+  id         String   @id @default(cuid())
+  progress   Int      @default(0)
+  enrolledAt DateTime @default(now())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model Specialty {
+  id        String     @id @default(cuid())
+  name      String
+  slug      String     @unique
+  questions Question[]
+}
+
+model Question {
+  id            String   @id @default(cuid())
+  text          String
+  options       Json
+  correctAnswer Int
+  explanation   String?
+  createdAt     DateTime @default(now())
+
+  specialtyId String
+  specialty   Specialty @relation(fields: [specialtyId], references: [id])
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  score     Int
+  answers   Json
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
