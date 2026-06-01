@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { PlayCircle, BookOpen, ArrowLeft } from 'lucide-react'
+export const dynamic = 'force-dynamic'
 
 const emojis: Record<string, string> = {
   'medicina-interna': '🫀',

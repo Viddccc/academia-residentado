@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Users, BookOpen, ShoppingBag, ClipboardCheck, LogOut } from 'lucide-react'
+export const dynamic = 'force-dynamic'
 
 export default async function AdminPage() {
   const session = await auth()
