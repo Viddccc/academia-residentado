@@ -1,13 +1,14 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Trophy, RotateCcw, LayoutDashboard, TrendingUp } from 'lucide-react'
+import { RotateCcw, LayoutDashboard, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 
-export default function ResultadoPage() {
+function ResultadoContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -37,7 +38,6 @@ export default function ResultadoPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
       <nav className="bg-white border-b px-6 h-16 flex items-center justify-between">
         <div className="font-semibold text-blue-700">🩺 MedPrep Academy</div>
         <Link href="/dashboard">
@@ -48,7 +48,6 @@ export default function ResultadoPage() {
       </nav>
 
       <div className="max-w-2xl mx-auto px-4 py-10">
-        {/* Resultado principal */}
         <Card className="mb-6">
           <CardContent className="p-8 text-center">
             <div className="text-5xl mb-4">
@@ -71,13 +70,15 @@ export default function ResultadoPage() {
               </div>
             </div>
 
-            <Badge className={aprobado ? 'bg-green-100 text-green-700 text-sm px-4 py-1' : 'bg-red-100 text-red-700 text-sm px-4 py-1'}>
+            <Badge className={aprobado
+              ? 'bg-green-100 text-green-700 text-sm px-4 py-1'
+              : 'bg-red-100 text-red-700 text-sm px-4 py-1'
+            }>
               {aprobado ? '✅ Aprobado' : '❌ Desaprobado'} — mínimo 60%
             </Badge>
           </CardContent>
         </Card>
 
-        {/* Rendimiento por área */}
         <Card className="mb-6">
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-4">
@@ -103,7 +104,6 @@ export default function ResultadoPage() {
           </CardContent>
         </Card>
 
-        {/* Acciones */}
         <div className="flex flex-col gap-3">
           <Button
             onClick={() => router.push('/dashboard/simulacro/examen?modo=completo')}
@@ -125,5 +125,13 @@ export default function ResultadoPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ResultadoPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><p>Cargando resultados...</p></div>}>
+      <ResultadoContent />
+    </Suspense>
   )
 }

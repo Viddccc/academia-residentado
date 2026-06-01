@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { Suspense, useEffect, useState, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -15,7 +15,7 @@ interface Pregunta {
   specialty: { name: string }
 }
 
-export default function ExamenPage() {
+function ExamenContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const modo = searchParams.get('modo')
@@ -234,5 +234,12 @@ export default function ExamenPage() {
         </div>
       </div>
     </div>
+  )
+}
+export default function ExamenPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><p>Cargando examen...</p></div>}>
+      <ExamenContent />
+    </Suspense>
   )
 }
