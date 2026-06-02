@@ -24,7 +24,7 @@ function ExamenContent() {
   const [preguntas, setPreguntas] = useState<Pregunta[]>([])
   const [current, setCurrent] = useState(0)
   const [respuestas, setRespuestas] = useState<Record<number, number>>({})
-  const [timeLeft, setTimeLeft] = useState(180 * 60) // 3 horas en segundos
+  const [timeLeft, setTimeLeft] = useState(15 * 60) // 15 minutos en segundos
   const [loading, setLoading] = useState(true)
   const [enviando, setEnviando] = useState(false)
 
