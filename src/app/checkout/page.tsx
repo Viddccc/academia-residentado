@@ -11,6 +11,7 @@ import { CheckCircle, Lock, ArrowLeft } from 'lucide-react'
 declare global {
   interface Window {
     Culqi: any
+    culqi: any
   }
 }
 
