@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, FileQuestion, BarChart2, ArrowLeft, PlayCircle } from 'lucide-react'
-
+import Navbar from '@/components/Navbar'
 export default async function SimulacroPage() {
   const session = await auth()
   if (!session?.user) redirect('/login')
@@ -29,14 +29,7 @@ export default async function SimulacroPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-      <nav className="bg-white border-b px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="font-semibold text-blue-700 text-lg">🩺 MedPrep Academy</Link>
-        <Link href="/dashboard">
-          <Button variant="ghost" size="sm">
-            <ArrowLeft className="h-4 w-4 mr-1" /> Mi panel
-          </Button>
-        </Link>
-      </nav>
+      <Navbar />
 
       <div className="max-w-4xl mx-auto px-4 py-10">
         <h1 className="text-3xl font-bold mb-2">Simulacros</h1>

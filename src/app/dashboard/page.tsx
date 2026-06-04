@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { BookOpen, ClipboardCheck, BarChart2, ShoppingBag, LogOut } from 'lucide-react'
 export const dynamic = 'force-dynamic'
+import Navbar from '@/components/Navbar'
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -25,17 +26,7 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-      <nav className="bg-white border-b px-6 h-16 flex items-center justify-between">
-        <div className="font-semibold text-blue-700 text-lg">🩺 MedPrep Academy</div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-600">Hola, {session.user.name} 👋</span>
-          <Link href="/api/auth/signout">
-            <Button variant="ghost" size="sm" className="text-gray-500">
-              <LogOut className="h-4 w-4 mr-1" /> Salir
-            </Button>
-          </Link>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="max-w-6xl mx-auto px-4 py-8 flex gap-8">
         {/* Sidebar */}

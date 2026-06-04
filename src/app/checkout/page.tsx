@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { CheckCircle, Lock, ArrowLeft } from 'lucide-react'
+import Navbar from '@/components/Navbar'
 
 declare global {
   interface Window {
@@ -133,12 +134,7 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="font-semibold text-blue-700 text-lg">🩺 MedPrep Academy</Link>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <Lock className="h-4 w-4" /> Pago 100% seguro
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="max-w-4xl mx-auto px-4 py-10">
         <Link href="/cursos" className="text-sm text-gray-400 hover:text-gray-600 flex items-center gap-1 mb-6">

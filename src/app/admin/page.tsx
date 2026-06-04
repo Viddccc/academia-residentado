@@ -4,7 +4,9 @@ import { db } from '@/lib/db'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Users, BookOpen, ShoppingBag, ClipboardCheck, LogOut } from 'lucide-react'
+import { Users, BookOpen, ShoppingBag, ClipboardCheck } from 'lucide-react'
+import Navbar from '@/components/Navbar'
+
 export const dynamic = 'force-dynamic'
 
 export default async function AdminPage() {
@@ -38,18 +40,7 @@ export default async function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <nav className="bg-white border-b px-6 h-16 flex items-center justify-between">
-        <div className="font-semibold text-blue-700 text-lg">🩺 MedPrep Academy — Admin</div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500">{session.user.name}</span>
-          <Link href="/api/auth/signout">
-            <Button variant="ghost" size="sm" className="text-gray-500">
-              <LogOut className="h-4 w-4 mr-1" /> Salir
-            </Button>
-          </Link>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="flex">
         {/* Sidebar */}
@@ -83,9 +74,8 @@ export default async function AdminPage() {
 
         {/* Main */}
         <main className="flex-1 p-8">
-          <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+          <h1 className="text-2xl font-bold mb-6">Dashboard Admin</h1>
 
-          {/* Stats */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {[
               { label: 'Usuarios registrados', value: totalUsuarios, icon: Users, color: 'bg-blue-50 text-blue-600' },
@@ -106,7 +96,6 @@ export default async function AdminPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Últimos usuarios */}
             <Card>
               <CardContent className="p-0">
                 <div className="flex items-center justify-between px-5 py-4 border-b">
@@ -145,7 +134,6 @@ export default async function AdminPage() {
               </CardContent>
             </Card>
 
-            {/* Últimas órdenes */}
             <Card>
               <CardContent className="p-0">
                 <div className="flex items-center justify-between px-5 py-4 border-b">

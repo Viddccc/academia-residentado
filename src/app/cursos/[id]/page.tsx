@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { CheckCircle, PlayCircle, Clock, BookOpen, ArrowLeft, ShoppingCart } from 'lucide-react'
 export const dynamic = 'force-dynamic'
+import Navbar from '@/components/Navbar'
 
 const emojis: Record<string, string> = {
   'medicina-interna': '🫀',
@@ -74,27 +75,7 @@ export default async function CursoDetallePage({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-      <nav className="bg-white border-b px-6 h-16 flex items-center gap-4">
-        <Link href="/" className="font-semibold text-blue-700 text-lg">
-          🩺 MedPrep Academy
-        </Link>
-        <div className="ml-auto flex items-center gap-3">
-          {session ? (
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm">Mi panel</Button>
-            </Link>
-          ) : (
-            <>
-              <Link href="/login">
-                <Button variant="ghost" size="sm">Iniciar sesión</Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Registrarse</Button>
-              </Link>
-            </>
-          )}
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Link href="/cursos" className="text-sm text-gray-400 hover:text-gray-600 flex items-center gap-1 mb-6">

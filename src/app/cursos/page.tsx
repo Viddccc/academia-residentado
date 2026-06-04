@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { PlayCircle, BookOpen, ArrowLeft } from 'lucide-react'
 export const dynamic = 'force-dynamic'
+import Navbar from '@/components/Navbar'
 
 const emojis: Record<string, string> = {
   'medicina-interna': '🫀',
@@ -40,24 +41,7 @@ export default async function CursosPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-      <nav className="bg-white border-b px-6 h-16 flex items-center gap-4">
-        <Link href="/" className="font-semibold text-blue-700 text-lg">
-          🩺 MedPrep Academy
-        </Link>
-        <div className="hidden md:flex items-center gap-6 flex-1 ml-4">
-          <Link href="/cursos" className="text-sm font-medium text-gray-900">Cursos</Link>
-          <Link href="#" className="text-sm text-gray-500">Simulacros</Link>
-          <Link href="#" className="text-sm text-gray-500">Planes</Link>
-        </div>
-        <div className="ml-auto flex items-center gap-3">
-          <Link href="/login">
-            <Button variant="ghost" size="sm">Iniciar sesión</Button>
-          </Link>
-          <Link href="/register">
-            <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Registrarse</Button>
-          </Link>
-        </div>
-      </nav>
+     <Navbar />
 
       <div className="max-w-6xl mx-auto px-4 py-10">
         {/* Header */}
