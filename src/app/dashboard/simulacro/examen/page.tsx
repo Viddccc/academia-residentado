@@ -30,46 +30,27 @@ function ExamenContent() {
   const preguntasRef = useRef<Pregunta[]>([])
   const respuestasRef = useRef<Record<number, number>>({})
 
-  useEffect(() => {
-    preguntasRef.current = preguntas
-  }, [preguntas])
+  useEffect(() => { preguntasRef.current = preguntas }, [preguntas])
+  useEffect(() => { respuestasRef.current = respuestas }, [respuestas])
 
   useEffect(() => {
-    respuestasRef.current = respuestas
-  }, [respuestas])
-
-  useEffect(() => {
-    const url = especialidadId
-      ? `/api/preguntas?especialidadId=${especialidadId}`
-      : '/api/preguntas'
-    fetch(url)
-      .then((r) => r.json())
-      .then((data) => {
-        setPreguntas(data)
-        setLoading(false)
-      })
+    const url = especialidadId ? `/api/preguntas?especialidadId=${especialidadId}` : '/api/preguntas'
+    fetch(url).then(r => r.json()).then(data => { setPreguntas(data); setLoading(false) })
   }, [especialidadId])
 
   const submitExamen = useCallback(async () => {
     if (enviandoRef.current) return
     enviandoRef.current = true
     setEnviando(true)
-
     const currentPreguntas = preguntasRef.current
     const currentRespuestas = respuestasRef.current
-
     const answers = currentPreguntas.map((p, i) => ({
-      questionId: p.id,
-      selected: currentRespuestas[i] ?? -1,
-      correct: p.correctAnswer,
+      questionId: p.id, selected: currentRespuestas[i] ?? -1, correct: p.correctAnswer,
     }))
-
-    const score = answers.filter((a) => a.selected === a.correct).length
-
+    const score = answers.filter(a => a.selected === a.correct).length
     try {
       const res = await fetch('/api/simulacro', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ score, answers }),
       })
       const data = await res.json()
@@ -82,12 +63,8 @@ function ExamenContent() {
   useEffect(() => {
     if (loading) return
     const interval = setInterval(() => {
-      setTimeLeft((t) => {
-        if (t <= 1) {
-          clearInterval(interval)
-          submitExamen()
-          return 0
-        }
+      setTimeLeft(t => {
+        if (t <= 1) { clearInterval(interval); submitExamen(); return 0 }
         return t - 1
       })
     }, 1000)
@@ -102,7 +79,7 @@ function ExamenContent() {
   }
 
   const handleRespuesta = (opcionIndex: number) => {
-    setRespuestas((prev) => ({ ...prev, [current]: opcionIndex }))
+    setRespuestas(prev => ({ ...prev, [current]: opcionIndex }))
   }
 
   if (loading) {
@@ -121,7 +98,7 @@ function ExamenContent() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl mb-4">📭</div>
-          <p className="text-gray-500 mb-4">No hay preguntas disponibles aún.</p>
+          <p className="text-gray-500 mb-4">No hay preguntas disponibles.</p>
           <Button onClick={() => router.push('/dashboard/simulacro')}>Volver</Button>
         </div>
       </div>
@@ -134,7 +111,6 @@ function ExamenContent() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header examen */}
       <div className="bg-white border-b px-6 py-3 flex items-center justify-between sticky top-0 z-10">
         <div className="font-semibold text-blue-700">🩺 MedPrep Academy</div>
         <div className="flex items-center gap-4">
@@ -147,7 +123,6 @@ function ExamenContent() {
       </div>
 
       <div className="flex flex-1 max-w-6xl mx-auto w-full px-4 py-6 gap-6">
-        {/* Panel navegación */}
         <div className="w-48 flex-shrink-0 hidden md:block">
           <div className="bg-white rounded-xl border p-4 sticky top-24">
             <div className="text-xs font-medium text-gray-500 mb-3">Navegación</div>
@@ -157,11 +132,9 @@ function ExamenContent() {
                   key={i}
                   onClick={() => setCurrent(i)}
                   className={`h-7 w-7 rounded text-xs font-medium transition-colors ${
-                    i === current
-                      ? 'bg-blue-600 text-white'
-                      : respuestas[i] !== undefined
-                      ? 'bg-blue-100 text-blue-600'
-                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                    i === current ? 'bg-blue-600 text-white'
+                    : respuestas[i] !== undefined ? 'bg-blue-100 text-blue-600'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                   }`}
                 >
                   {i + 1}
@@ -169,5 +142,79 @@ function ExamenContent() {
               ))}
             </div>
             <div className="mt-4 flex flex-col gap-1.5 text-xs text-gray-400">
-              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-blue-600 rounded"></div>Actual</div>
-              <div className="flex items-center gap-2"><div c
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-600 rounded"></div>Actual
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-100 rounded"></div>Respondida
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-gray-100 rounded border"></div>Sin responder
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1">
+          <div className="bg-white rounded-xl border p-6 mb-4">
+            <div className="flex items-center justify-between mb-4">
+              <Badge className="bg-blue-100 text-blue-700">
+                {pregunta.specialty?.name ?? 'General'}
+              </Badge>
+              <span className="text-sm text-gray-400">Pregunta {current + 1} de {preguntas.length}</span>
+            </div>
+            <p className="text-gray-800 leading-relaxed mb-6 text-sm md:text-base">
+              {pregunta.text}
+            </p>
+            <div className="flex flex-col gap-3">
+              {pregunta.options.map((opcion, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleRespuesta(i)}
+                  className={`flex items-center gap-3 p-3 rounded-lg border text-left text-sm transition-all ${
+                    respuestas[current] === i
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className={`w-7 h-7 rounded-full border flex items-center justify-center text-xs font-medium flex-shrink-0 ${
+                    respuestas[current] === i
+                      ? 'bg-blue-500 text-white border-blue-500'
+                      : 'border-gray-300 text-gray-500'
+                  }`}>
+                    {String.fromCharCode(65 + i)}
+                  </span>
+                  {opcion}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Button variant="outline" onClick={() => setCurrent(c => Math.max(0, c - 1))} disabled={current === 0}>
+              <ChevronLeft className="h-4 w-4 mr-1" /> Anterior
+            </Button>
+            {isUltima ? (
+              <Button onClick={submitExamen} disabled={enviando} className="bg-green-600 hover:bg-green-700">
+                <Flag className="h-4 w-4 mr-2" />
+                {enviando ? 'Enviando...' : 'Finalizar examen'}
+              </Button>
+            ) : (
+              <Button onClick={() => setCurrent(c => Math.min(preguntas.length - 1, c + 1))} className="bg-blue-600 hover:bg-blue-700">
+                Siguiente <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function ExamenPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><p>Cargando examen...</p></div>}>
+      <ExamenContent />
+    </Suspense>
+  )
+}

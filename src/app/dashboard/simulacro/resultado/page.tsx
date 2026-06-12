@@ -47,4 +47,85 @@ function ResultadoContent() {
             <div className="text-5xl mb-4">
               {porcentaje >= 80 ? '🏆' : porcentaje >= 60 ? '👍' : '📚'}
             </div>
-            <h1 className="text-2xl font-bold mb-2
+            <h1 className="text-2xl font-bold mb-2">
+              {aprobado ? '¡Simulacro completado!' : 'Simulacro finalizado'}
+            </h1>
+            <p className="text-gray-500 mb-6">{getMensaje()}</p>
+
+            <div className="flex items-center justify-center gap-8 mb-6">
+              <div>
+                <div className={`text-5xl font-bold ${getColor()}`}>{score}</div>
+                <div className="text-sm text-gray-400">de {total} correctas</div>
+              </div>
+              <div className="text-gray-200 text-4xl">|</div>
+              <div>
+                <div className={`text-5xl font-bold ${getColor()}`}>{porcentaje}%</div>
+                <div className="text-sm text-gray-400">de aciertos</div>
+              </div>
+            </div>
+
+            <Badge className={aprobado
+              ? 'bg-green-100 text-green-700 text-sm px-4 py-1'
+              : 'bg-red-100 text-red-700 text-sm px-4 py-1'
+            }>
+              {aprobado ? '✅ Aprobado' : '❌ Desaprobado'} — mínimo 60%
+            </Badge>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-6">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="h-4 w-4 text-blue-600" />
+              <h2 className="font-semibold">Rendimiento por área</h2>
+            </div>
+            <div className="flex flex-col gap-4">
+              {areas.map((area) => (
+                <div key={area.name}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-gray-700">{area.name}</span>
+                    <span className="font-medium">{area.pct}%</span>
+                  </div>
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full ${area.pct >= 60 ? 'bg-blue-500' : 'bg-red-400'}`}
+                      style={{ width: `${area.pct}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="flex flex-col gap-3">
+          <Button
+            onClick={() => router.push('/dashboard/simulacro/examen?modo=completo')}
+            className="w-full bg-blue-600 hover:bg-blue-700"
+            size="lg"
+          >
+            <RotateCcw className="h-4 w-4 mr-2" /> Repetir simulacro
+          </Button>
+          <Link href="/dashboard/simulacro">
+            <Button variant="outline" className="w-full" size="lg">
+              Ver todos los simulacros
+            </Button>
+          </Link>
+          <Link href="/dashboard">
+            <Button variant="ghost" className="w-full" size="lg">
+              <LayoutDashboard className="h-4 w-4 mr-2" /> Ir al dashboard
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function ResultadoPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><p>Cargando resultados...</p></div>}>
+      <ResultadoContent />
+    </Suspense>
+  )
+}
